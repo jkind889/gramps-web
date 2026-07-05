@@ -54,16 +54,6 @@ export class GrampsjsViewSettingsUser extends GrampsjsView {
           width: 100%;
         }
 
-        .profile-fields {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 12px;
-        }
-
-        .profile-fields md-filled-text-field {
-          width: 100%;
-        }
-
         .profile-field {
           display: flex;
           align-items: end;
@@ -122,8 +112,11 @@ export class GrampsjsViewSettingsUser extends GrampsjsView {
         </dl>
         <div style="clear: both;"></div>
 
-        <h3>${this._('Change profile')}</h3>
-        ${this.renderChangeProfile()}
+        <h3>${this._('Change username')}</h3>
+        ${this.renderChangeUsername()}
+
+        <h3>${this._('Change full name')}</h3>
+        ${this.renderChangeFullName()}
 
         <h3>${this._('Change E-mail')}</h3>
         ${this.renderChangeEmail()}
@@ -298,29 +291,32 @@ export class GrampsjsViewSettingsUser extends GrampsjsView {
     this.appState.updateSettings({treeDefaultView: view})
   }
 
-  renderChangeProfile() {
+  renderChangeUsername() {
     return html`
-      <p class="profile-fields">
-        <span class="profile-field">
-          <md-filled-text-field
-            id="change-username"
-            label="${this._('Username: ').replace(':', '')}"
-            value="${this._userInfo?.name || ''}"
-          ></md-filled-text-field>
-          <md-outlined-button @click="${this._changeUsername}">
-            ${this._('Save')}
-          </md-outlined-button>
-        </span>
-        <span class="profile-field">
-          <md-filled-text-field
-            id="change-full-name"
-            label="${this._('Full Name')}"
-            value="${this._userInfo?.full_name || ''}"
-          ></md-filled-text-field>
-          <md-outlined-button @click="${this._changeFullName}">
-            ${this._('Save')}
-          </md-outlined-button>
-        </span>
+      <p class="profile-field">
+        <md-filled-text-field
+          id="change-username"
+          label="${this._('Username: ').replace(':', '')}"
+          value="${this._userInfo?.name || ''}"
+        ></md-filled-text-field>
+        <md-outlined-button @click="${this._changeUsername}">
+          ${this._('Save')}
+        </md-outlined-button>
+      </p>
+    `
+  }
+
+  renderChangeFullName() {
+    return html`
+      <p class="profile-field">
+        <md-filled-text-field
+          id="change-full-name"
+          label="${this._('Full Name')}"
+          value="${this._userInfo?.full_name || ''}"
+        ></md-filled-text-field>
+        <md-outlined-button @click="${this._changeFullName}">
+          ${this._('Save')}
+        </md-outlined-button>
       </p>
     `
   }
