@@ -451,9 +451,13 @@ export class GrampsjsViewSettingsUser extends GrampsjsView {
 
   async _changeFullName() {
     const fullNameField = this.shadowRoot.getElementById('change-full-name')
+    const fullName = fullNameField.value
+    if (fullName === (this._userInfo?.full_name || '')) {
+      return
+    }
 
     const payload = {
-      full_name: fullNameField.value,
+      full_name: fullName,
     }
 
     this.loading = true

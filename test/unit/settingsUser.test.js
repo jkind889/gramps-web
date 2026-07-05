@@ -1,7 +1,12 @@
 import {describe, it, expect, vi} from 'vitest'
 import {GrampsjsViewSettingsUser} from '../../src/views/GrampsjsViewSettingsUser.js'
 
-const makeElement = ({username, fullName, currentUsername = 'old-name'}) => {
+const makeElement = ({
+  username,
+  fullName,
+  currentUsername = 'old-name',
+  currentFullName = 'Old Full Name',
+}) => {
   const element = new GrampsjsViewSettingsUser()
   const shadowRoot = element.createRenderRoot()
   const usernameField = document.createElement('input')
@@ -15,7 +20,7 @@ const makeElement = ({username, fullName, currentUsername = 'old-name'}) => {
   shadowRoot.append(usernameField, fullNameField)
 
   element.appState = {apiPut}
-  element._userInfo = {name: currentUsername}
+  element._userInfo = {name: currentUsername, full_name: currentFullName}
   element._fetchOwnUserDetails = vi.fn().mockResolvedValue()
   vi.spyOn(element, 'dispatchEvent')
 
@@ -91,6 +96,18 @@ describe('user profile settings', () => {
       })
     )
     expect(element._fetchOwnUserDetails).toHaveBeenCalledOnce()
+  })
+
+  it('does not submit an unchanged full name', async () => {
+    const {element, apiPut} = makeElement({
+      username: 'old-name',
+      fullName: 'Old Full Name',
+    })
+
+    await element._changeFullName()
+
+    expect(apiPut).not.toHaveBeenCalled()
+    expect(element._fetchOwnUserDetails).not.toHaveBeenCalled()
   })
 
   it('shows a specific error when the username is already taken', async () => {
